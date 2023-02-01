@@ -1,0 +1,315 @@
+****Welcome To Employee Payroll Database****
+
+UC1: Ability to create a payroll service database.
+Solution:
+	//To Create a Database using 'CREATE' command like:payroll_service.
+        CREATE DATABASE payroll_service;	
+	Query OK, 
+	//To Show the Database using 'show; command.
+	show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| information_schema |
+	| mysql              |
+	| payroll_service    |
+	| performance_schema |
+	| sakila             |
+	| sys                |
+	| world              |
+	+--------------------+
+	
+	//You want to choose a database using 'USE' command like:payroll_service.
+	 USE payroll_service;
+	Database changed
+
+	//Select a particular database using 'SELECT' command.
+	 SELECT DATABASE();
+	+-----------------+
+	| DATABASE()      |
+	+-----------------+
+	| payroll_service |
+	+-----------------+
+	
+
+
+UC2:Create a employee payroll table in the payroll service database.
+Solution:
+	//To Create a Table using 'CREATE TABLE' command in particular database like employee_payroll.
+	 CREATE TABLE employee_payroll
+    	 (
+    	 	id      INT unsigned NOT NULL AUTO_INCREMENT,  #Unique ID for the record
+    	 	name     VARCHAR(150) NOT NULL,                #Names of Employee
+    	 	salary   Double NOT NULL,                      #Employee Salary
+    		start    DATE NOT NULL,                        #Employee Start Date
+    	 	PRIMARY KEY (id)                               #Make id primary key
+    	 );
+
+	
+	//Show a table in a display using 'DESCRIBE'command.
+
+	 DESCRIBE employee_payroll;
+              Select*from employee_payroll;
+
+	+--------+--------------+------+-----+---------+----------------+
+	| Field  | Type         | Null | Key | Default | Extra          |
+	+--------+--------------+------+-----+---------+----------------+
+	| id     | int unsigned | NO   | PRI | NULL    | auto_increment |
+	| name   | varchar(150) | NO   |     | NULL    |                |
+	| salary | double       | NO   |     | NULL    |                |
+	| start  | date         | NO   |     | NULL    |                |
+	+--------+--------------+------+-----+---------+----------------+
+
+UC3 Create employee payroll data in the payroll service database.
+Solution:
+	//Insert a data in a particular database using 'INSERT'command.
+	INSERT INTO employee_payroll (name,salary,start) VALUES
+   	 -> ('Bill', 1000000.00, '2019-01-03'),
+   	 -> ('Terise', 2000000.00, '2017-11-13'),
+    	 -> ('Charlie', 3000000.00, '2020-05-21');
+
+	
+	//Show a data in a display using 'SELECT'command.
+	 SELECT * FROM employee_payroll;
+	+----+---------+---------+------------+
+	| id | name    | salary  | start      |
+	+----+---------+---------+------------+
+	|  1 | Bill    | 1000000 | 2019-01-03 |
+	|  2 | Terise  | 2000000 | 2017-11-13 |
+	|  3 | Charlie | 3000000 | 2020-05-21 |
+	+----+---------+---------+------------+
+
+C4:Retrieve all the employee payroll data that is added to payroll service database.
+	
+	//Retrieve all the data from the employee_payroll table using 'SELECT' command.
+	 SELECT * FROM employee_payroll;
+	+----+---------+---------+------------+
+	| id | name    | salary  | start      |
+	+----+---------+---------+------------+
+	|  1 | Bill    | 1000000 | 2019-01-03 |
+	|  2 | Terise  | 2000000 | 2017-11-13 |
+	|  3 | Charlie | 3000000 | 2020-05-21 |
+	+----+---------+---------+------------+
+
+UC5:Retrieve salary data for a particular employee as well as all employees who have joined in a particular data range.
+Solution:
+	//View the particular salary given a name like Bill:10000.
+	SELECT salary FROM employee_payroll where name  = 'Bill';            #Selecting Bill entry
+	+---------+
+	| salary  |
+	+---------+
+	| 1000000 |
+	+---------+
+	
+	//Using condition start salary using BETWEEN CAST AND DATE (NOW()).
+ 
+	 SELECT * FROM employee_payroll                                         #selecting employee from data range
+
+        //The SQL CAST function is mainly used to convert the expression from one data type to another data type
+
+    	WHERE start BETWEEN CAST('2019-01-01' AS DATE) AND DATE(NOW());
+	+----+---------+---------+------------+
+	| id | name    | salary  | start      |
+	+----+---------+---------+------------+
+	|  1 | Bill    | 1000000 | 2019-01-03 |
+	|  3 | Charlie | 3000000 | 2020-05-21 |
+	+----+---------+---------+------------+
+
+UC6:Add Gender to Employee Payroll Table and Update the Rows to reflect the correct Employee Gender.
+Solution:
+	//Add the gender column in employee_payroll using ALTER command like delete,add,etc 
+	 ALTER TABLE employee_payroll ADD gender CHAR(1) AFTER names;
+	
+	describe employee_payroll;
+	+--------+--------------+------+-----+---------+----------------+
+	| Field  | Type         | Null | Key | Default | Extra          |
+	+--------+--------------+------+-----+---------+----------------+
+	| id     | int unsigned | NO   | PRI | NULL    | auto_increment |
+	| names  | varchar(150) | NO   |     | NULL    |                |
+	| gender | char(1)      | YES  |     | NULL    |                |
+	| salary | double       | NO   |     | NULL    |                |
+	| start  | date         | NO   |     | NULL    |                |
+	+--------+--------------+------+-----+---------+----------------+
+	
+	
+	//Data stored in table using 'update' command.
+	 update employee_payroll set gender = 'F' where names = 'Terise';
+	
+	 SELECT * FROM employee_payroll;
+	+----+---------+--------+---------+------------+
+	| id | names   | gender | salary  | start      |
+	+----+---------+--------+---------+------------+
+	|  1 | Bill    | NULL   | 1000000 | 2019-01-03 |
+	|  2 | Terise  | F      | 2000000 | 2017-11-13 |
+	|  3 | Charlie | NULL   | 3000000 | 2020-05-21 |
+	+----+---------+--------+---------+------------+
+	
+	//Data stored in table using 'update' command.
+	update employee_payroll set gender = 'M' where names = 'Bill' or names = 'Charlie';
+	
+	//View the Database.
+	SELECT * FROM employee_payroll;
+	+----+---------+--------+---------+------------+
+	| id | names   | gender | salary  | start      |
+	+----+---------+--------+---------+------------+
+	|  1 | Bill    | M      | 1000000 | 2019-01-03 |
+	|  2 | Terise  | F      | 2000000 | 2017-11-13 |
+	|  3 | Charlie | M      | 3000000 | 2020-05-21 |
+	+----+---------+--------+---------+------------+
+
+UC7:Find sum, average, min, max and number of male and female employees.
+Solution:
+	//Find  Average salary according to a gender (like M )using AVG() command; 
+	SELECT AVG(salary) FROM employee_payroll WHERE gender = 'M' GROUP BY gender;
+	+-------------+
+	| AVG(salary) |
+	+-------------+
+	|     2000000 |
+	+-------------+
+	
+	//Count the no of fields (like name) using COUNT() command.
+        SELECT gender, COUNT(name) FROM employee_payroll GROUP BY gender;
+	+--------+--------------+
+	| gender | COUNT(name) |
+	+--------+--------------+
+	| M      |            2 |
+	| F      |            1 |
+	+--------+--------------+
+
+	//Find the Sum of the salary accourding to a field (like gender) using SUM() command.
+	SELECT gender, SUM(salary) FROM employee_payroll GROUP BY gender;
+	+--------+-------------+
+	| gender | SUM(salary) |
+	+--------+-------------+
+	| M      |     4000000 |
+	| F      |     2500000 |
+	+--------+-------------+
+
+UC8:Extend employee_payroll data to store employee information like employee phone, address and department.
+Solution:
+	//Add a column in a table like: phone number.
+	 ALTER TABLE employee_payroll ADD phone_number VARCHAR(13) AFTER names;
+	
+	
+	//Add a column in a table like:address.
+	 ALTER TABLE employee_payroll ADD address VARCHAR(150) AFTER phone_number;
+
+	//Add Default Value for address field.
+	ALTER TABLE employee_payroll ALTER address SET DEFAULT 'TBD';
+
+	//Ensure employee department is non nullable fields.
+	 ALTER TABLE employee_payroll ADD department VARCHAR(20) NOT NULL AFTER address;
+	
+	//View a table in a display. 
+	DESCRIBE employee_payroll;
+        SELECT * FROM employee_payroll;
+	+--------------+--------------+------+-----+---------+----------------+
+	| Field        | Type         | Null | Key | Default | Extra          |
+	+--------------+--------------+------+-----+---------+----------------+
+	| id           | int unsigned | NO   | PRI | NULL    | auto_increment |
+	| names        | varchar(150) | NO   |     | NULL    |                |
+	| phone_number | varchar(13)  | YES  |     | NULL    |                |
+	| address      | varchar(150) | YES  |     | TBD     |                |
+	| department   | varchar(20)  | NO   |     | NULL    |                |
+	| gender       | char(1)      | YES  |     | NULL    |                |
+	| salary       | double       | NO   |     | NULL    |                |
+	| start        | date         | NO   |     | NULL    |                |
+	+--------------+--------------+------+-----+---------+----------------+
+
+UC9 // ALTER TABLE employee_payroll ADD deductions,Taxable_pay, tax,net_pay
+
+mysql> ALTER TABLE employee_payroll ADD deductions Double NOT NULL AFTER basic_p		# Alter table by adding deductions
+ay;
+Query OK, 0 rows affected (1.75 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE employee_payroll ADD taxable_pay Double NOT NULL AFTER deduct		# Alter table by adding taxable_pay
+ions;
+Query OK, 0 rows affected (1.34 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE employee_payroll ADD tax Double NOT NULL AFTER taxable_pay;			# Alter table by adding tax
+Query OK, 0 rows affected (1.15 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE employee_payroll ADD net_pay Double NOT NULL AFTER tax;			# Alter table by adding net_pay
+Query OK, 0 rows affected (1.72 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee_payroll;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name         | varchar(100) | NO   |     | NULL    |                |
+| phone_number | varchar(250) | YES  |     | NULL    |                |
+| address      | varchar(250) | YES  |     | TBD     |                |
+| department   | varchar(250) | NO   |     | NULL    |                |
+| gender       | char(1)      | YES  |     | NULL    |                |
+| basic_pay    | double       | NO   |     | NULL    |                |
+| deductions   | double       | NO   |     | NULL    |                |
+| taxable_pay  | double       | NO   |     | NULL    |                |
+| tax          | double       | NO   |     | NULL    |                |
+| net_pay      | double       | NO   |     | NULL    |                |
+| start        | date         | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+12 rows in set (0.06 sec)
+
+UC10 // Added two terisa with different department.
+
+mysql> INSERT INTO employee_payroll
+    -> (name, department, gender, basic_pay, deductions, taxable_pay, tax, net_p
+ay, start) VALUES
+    -> ('Terisa' , 'Marketting','F',300000.00,100000.00,200000.00,500000.00,1000
+000.00,'2018-01-02');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> SELECT * from employee_payroll;
++----+---------+--------------+---------+------------+--------+-----------+-----
+-------+-------------+--------+---------+------------+
+| id | name    | phone_number | address | department | gender | basic_pay | dedu
+ctions | taxable_pay | tax    | net_pay | start      |
++----+---------+--------------+---------+------------+--------+-----------+-----
+-------+-------------+--------+---------+------------+
+|  6 | Bill    | NULL         | NULL    |            | M      |    100000 |
+     0 |           0 |      0 |       0 | 2018-01-03 |
+|  7 | Terisa  | NULL         | NULL    |            | F      |    300000 |
+     0 |           0 |      0 |       0 | 2019-11-13 |
+|  8 | Charile | NULL         | NULL    |            | M      |    300000 |
+     0 |           0 |      0 |       0 | 2020-02-21 |
+|  9 | Terisa  | NULL         | TBD     | Marketting | F      |    300000 |
+100000 |      200000 | 500000 | 1000000 | 2018-01-02 |
++----+---------+--------------+---------+------------+--------+-----------+-----
+-------+-------------+--------+---------+------------+
+4 rows in set (0.06 sec)
+
+mysql> SELECT * from employee_payroll;
+ERROR 2013 (HY000): Lost connection to MySQL server during query
+No connection. Trying to reconnect...
+Connection id:    16
+Current database: payroll_service
+
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+| id | name    | phone_number | address | department | gender | basic_pay | deductions | taxable_pay | tax    | net_pay | start      |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+|  6 | Bill    | NULL         | NULL    |            | M      |    0      |          0 |           0 |      0 |       0 | 2018-01-03 |
+|  7 | Terisa  | NULL         | NULL    |            | F      |    300000 |          0 |           0 |      0 |       0 | 2019-11-13 |
+|  8 | Charile | NULL         | NULL    |            | M      |    0      |          0 |           0 |      0 |       0 | 2020-02-21 |
+|  9 | Terisa  | NULL         | TBD     | Marketting | F      |    300000 |     100000 |      200000 | 500000 | 1000000 | 2018-01-02 |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+4 rows in set (0.21 sec)
+
+mysql> UPDATE employee_payroll SET department="Sales" WHERE id=7;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * from employee_payroll;
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+| id | name    | phone_number | address | department | gender | basic_pay | deductions | taxable_pay | tax    | net_pay | start      |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+|  6 | Bill    | NULL         | NULL    |            | M      |    0      |          0 |           0 |      0 |       0 | 2018-01-03 |
+|  7 | Terisa  | NULL         | NULL    | Sales      | F      | 300000    |          0 |           0 |      0 |       0 | 2019-11-13 |
+|  8 | Charile | NULL         | NULL    |            | M      |    0           0       |           0 |      0 |       0 | 2020-02-21 |
+|  9 | Terisa  | NULL         | TBD     | Marketting | F      |    300000 |     100000 |      200000 | 500000 | 1000000 | 2018-01-02 |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+--------+---------+------------+
+4 rows in set (0.00 sec)
